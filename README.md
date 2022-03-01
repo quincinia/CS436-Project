@@ -1,2 +1,12 @@
 # CS436-Project
-CS 436, Spring 2022, Feng Yan, "Search YouTube Data"
+Ean Jacob Gayban, Andrew Hervey, Charles Pezeshki
+
+Uses data from [here](https://netsg.cs.sfu.ca/youtubedata/) and provides the following operations:
+* Top-k queries
+  * Show top k categories by # of videos
+  * Show top k rated videos
+  * Show top k most popular videos (views)
+* Range queries
+  * Given a list of categories C, and a range [t1, t2], find all videos that match
+* User recommendations
+  * Given a username, show all recommended videos that appear under that user's videos
