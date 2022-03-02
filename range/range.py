@@ -25,5 +25,3 @@ if __name__ == '__main__':
     df.filter(f'{categories} AND length >= {t1} AND length <= {t2}').show()
 
 
-
-
