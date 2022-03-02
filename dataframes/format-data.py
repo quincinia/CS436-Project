@@ -28,7 +28,7 @@ if __name__ == '__main__':
     df = df.withColumn('ratings', df.ratings.cast('int'))
     df = df.withColumn('comments', df.comments.cast('int'))
 
-    print(df.first())
+    df.show(1)
 
 
 
