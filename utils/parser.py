@@ -1,0 +1,1 @@
+# Reads CLI and gets query type and formats `arg` array
