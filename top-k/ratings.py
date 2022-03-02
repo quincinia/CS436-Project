@@ -18,8 +18,8 @@ if __name__ == '__main__':
 
     # Run query
     # Query still needs to be made
-    # Is it by straight ratings value or rate * number of ratings?
-    # Or something else?
+    # Ranking by rate * ratings
+    df.select(df.videoID, df.rate, df.ratings, df.rate * df.ratings).orderBy('(rate * ratings)', ascending=False).show(k)
 
 
 
