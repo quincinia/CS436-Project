@@ -1,58 +1,27 @@
-from __future__ import annotations
-import sys
-
+# Import command line parser
+# Import DataFrame formatter
 from pyspark.context import SparkContext
 from pyspark.sql.session import SparkSession
-from pyspark.sql.functions import split
 
 sc = SparkContext("local")
 spark = SparkSession(sc)
 
-# Running instructions: "spark-submit ratings.py 0.txt 5"
-
-
-def formatData(fileName: str):
-    # Read data
-    df = spark.read.text(fileName)
-
-    # Split data into array of values (however there is only 1 column)
-    df = df.select(split(df.value, "\t", 10).alias("value"))
-
-    # Split array of values into columns
-    df = df.select(df.value[0].alias('videoID'), df.value[1].alias('uploader'), df.value[2].alias('age'), df.value[3].alias('category'), df.value[4].alias(
-        'length'), df.value[5].alias('views'), df.value[6].alias('rate'), df.value[7].alias('ratings'), df.value[8].alias('comments'), df.value[9].alias('relatedIDs'))
-
-    # Split string of relatedIDs into array
-    df = df.withColumn('relatedIDs', split(df.relatedIDs, '\t'))
-
-    # Cast the numerical types
-    df = df.withColumn('age', df.age.cast('int'))
-    df = df.withColumn('length', df.length.cast('int'))
-    df = df.withColumn('views', df.views.cast('int'))
-    df = df.withColumn('rate', df.rate.cast('float'))
-    df = df.withColumn('ratings', df.ratings.cast('int'))
-    df = df.withColumn('comments', df.comments.cast('int'))
-
-    return df
-
-
-def main(argv):
+if __name__ == '__main__':
     # Get args from command line parser
-    args = sys.argv
+    args = []
 
     # Initialize dataframe from dataframe formatter
-    df = formatData(args[1])
+    df = args[0]
 
-    # Get k
-    k = args[2]
+    # Get categories
+    categories = args[1]
+
+    # Get bounds
+    t1, t2 = args[2], args[3]
 
     # Run query
-    # Query still needs to be made
-    # Ranking by rate * ratings
-    df.select(df.videoID, df.rate, df.ratings, df.rate *
-              df.ratings).orderBy('(rate * ratings)', ascending=False).show(int(k))
+    # Convert categories list to SQL query
+    # Filter columns as needed
+    df.filter(f'{categories} AND length >= {t1} AND length <= {t2}').show()
 
-
-if __name__ == '__main__':
-    main(sys.argv)
 
