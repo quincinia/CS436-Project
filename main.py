@@ -55,6 +55,18 @@ def ratingQuery(dataframe, args):
                      dataframe.ratings).orderBy('(rate * ratings)', ascending=False).show(int(k))
 
 
+def categoriesQuery(dataframe, args):
+    pass
+
+
+def viewsQuery(dataframe, args):
+    pass
+
+
+def userRecommendationQuery(df, args):
+    pass
+
+
 def main(argv):
 
     # Get args from command line parser
@@ -66,9 +78,14 @@ def main(argv):
 
     if(queryChoice == "range"):
         rangeQuery(df, args)
-
     elif(queryChoice == "ratings"):
         ratingQuery(df, args)
+    elif(queryChoice == "categories"):
+        categoriesQuery(df, args)
+    elif(queryChoice == "views"):
+        viewsQuery(df, args)
+    elif(queryChoice == "user-recommendation"):
+        userRecommendationQuery(df, args)
 
 
 if __name__ == '__main__':
