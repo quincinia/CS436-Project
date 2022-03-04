@@ -3,7 +3,7 @@ import sys
 
 from pyspark.context import SparkContext
 from pyspark.sql.session import SparkSession
-from pyspark.sql.functions import split, trim, col
+from pyspark.sql.functions import split, trim, col, explode
 from pyspark.sql.types import *
 
 sc = SparkContext("local")
@@ -31,22 +31,14 @@ def formatData(fileName: str):
     df = df.withColumn('ratings', df.ratings.cast('int'))
     df = df.withColumn('comments', df.comments.cast('int'))
 
-    # Trimming Whitespace
-    df = df.withColumn('age', trim('age'))
-    df = df.withColumn('length', trim('length'))
-    df = df.withColumn('views', trim('views'))
-    df = df.withColumn('rate', trim('rate'))
-    df = df.withColumn('ratings', trim('ratings'))
-    df = df.withColumn('comments', trim('comments'))
-
     return df
 
 
 def rangeQuery(dataframe, args):
-    categories = args[3]
+    category = args[3]
     t1, t2 = args[4], args[5]
-    dataframe.filter((col('category') == "Music") & (col('length') >=
-                                                     int(t1)) & (col('length') <= int(t2))).show(5)
+    dataframe.filter((col('category') == category) & (col('length') >=
+                                                      int(t1)) & (col('length') <= int(t2))).orderBy('length', ascending=False).show(5)
 
 
 def ratingQuery(dataframe, args):
@@ -58,15 +50,17 @@ def ratingQuery(dataframe, args):
 def categoriesQuery(dataframe):
     dataframe.groupBy('category').count().orderBy(
         'count', ascending=False).show()
-    pass
 
 
 def viewsQuery(dataframe, args):
-    pass
+    k = args[3]
+    dataframe.sort(dataframe.views.desc()).show(int(k))
 
 
 def userRecommendationQuery(df, args):
-    pass
+    username = args[3]
+    df.filter(f"uploader='{username}'").select(
+        explode('relatedIDs').alias(f'{username} - Related')).dropDuplicates().show()
 
 
 def main(argv):
