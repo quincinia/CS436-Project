@@ -55,7 +55,9 @@ def ratingQuery(dataframe, args):
                      dataframe.ratings).orderBy('(rate * ratings)', ascending=False).show(int(k))
 
 
-def categoriesQuery(dataframe, args):
+def categoriesQuery(dataframe):
+    dataframe.groupBy('category').count().orderBy(
+        'count', ascending=False).show()
     pass
 
 
@@ -81,7 +83,7 @@ def main(argv):
     elif(queryChoice == "ratings"):
         ratingQuery(df, args)
     elif(queryChoice == "categories"):
-        categoriesQuery(df, args)
+        categoriesQuery(df)
     elif(queryChoice == "views"):
         viewsQuery(df, args)
     elif(queryChoice == "user-recommendation"):
