@@ -13,7 +13,7 @@ if __name__ == '__main__':
     # Initialize dataframe from dataframe formatter
     df = args[0]
 
-    # Get categories
+    # Get categories (array)
     categories = args[1]
 
     # Get bounds
@@ -22,6 +22,4 @@ if __name__ == '__main__':
     # Run query
     # Convert categories list to SQL query
     # Filter columns as needed
-    df.filter(f'{categories} AND length >= {t1} AND length <= {t2}').show()
-
-
+    df.filter(f'category IN ({",".join(categories)}) AND length >= {t1} AND length <= {t2}').show()
