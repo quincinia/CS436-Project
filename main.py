@@ -35,10 +35,27 @@ def formatData(fileName: str):
 
 
 def rangeQuery(dataframe, args):
-    category = args[3]
-    t1, t2 = args[4], args[5]
-    dataframe.filter((col('category') == category) & (col('length') >=
-                                                      int(t1)) & (col('length') <= int(t2))).orderBy('length', ascending=False).show(5)
+    categories = list(args[5:])
+
+    q = 0
+    for i in categories:
+        if(i.find("&")):
+            k = 0
+            for j in i:
+                if(j == "&"):
+                    print("NEW I")
+                    categories[q] = i[0:k] + ' ' + i[k] + ' ' + i[k+1:]
+                    print(i)
+                    break
+                k += 1
+        q += 1
+
+    t1, t2 = args[3], args[4]
+    string = (("','").join(categories))
+    string1 = f"""category IN ('{string}') AND length >= {t1} AND length <= {t2}"""
+    print("STRING1")
+    print(string1)
+    dataframe.filter(string1).show()
 
 
 def ratingQuery(dataframe, args):
