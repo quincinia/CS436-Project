@@ -37,18 +37,18 @@ def formatData(fileName: str):
 def rangeQuery(dataframe, args):
     categories = list(args[5:])
 
-    q = 0
-    for i in categories:
-        if(i.find("&")):
-            k = 0
-            for j in i:
-                if(j == "&"):
-                    print("NEW I")
-                    categories[q] = i[0:k] + ' ' + i[k] + ' ' + i[k+1:]
-                    print(i)
-                    break
-                k += 1
-        q += 1
+    # q = 0
+    # for i in categories:
+    #     if(i.find("&")):
+    #         k = 0
+    #         for j in i:
+    #             if(j == "&"):
+    #                 print("NEW I")
+    #                 categories[q] = i[0:k] + ' ' + i[k] + ' ' + i[k+1:]
+    #                 print(i)
+    #                 break
+    #             k += 1
+    #     q += 1
 
     t1, t2 = args[3], args[4]
     string = (("','").join(categories))
