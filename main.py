@@ -17,19 +17,29 @@ def formatData(fileName: str):
     # Split data into array of values (however there is only 1 column)
     df = df.select(split(df.value, "\t", 10).alias("value"))
     # Split array of values into columns
-    df = df.select(df.value[0].alias('videoID'), df.value[1].alias('uploader'), df.value[2].alias('age'), df.value[3].alias('category'), df.value[4].alias(
-        'length'), df.value[5].alias('views'), df.value[6].alias('rate'), df.value[7].alias('ratings'), df.value[8].alias('comments'), df.value[9].alias('relatedIDs'))
+    df = df.select(
+        df.value[0].alias("videoID"),
+        df.value[1].alias("uploader"),
+        df.value[2].alias("age"),
+        df.value[3].alias("category"),
+        df.value[4].alias("length"),
+        df.value[5].alias("views"),
+        df.value[6].alias("rate"),
+        df.value[7].alias("ratings"),
+        df.value[8].alias("comments"),
+        df.value[9].alias("relatedIDs"),
+    )
 
     # Split string of relatedIDs into array
-    df = df.withColumn('relatedIDs', split(df.relatedIDs, '\t'))
+    df = df.withColumn("relatedIDs", split(df.relatedIDs, "\t"))
 
     # Cast the numerical types
-    df = df.withColumn('age', df.age.cast('int'))
-    df = df.withColumn('length', df.length.cast('int'))
-    df = df.withColumn('views', df.views.cast('int'))
-    df = df.withColumn('rate', df.rate.cast('float'))
-    df = df.withColumn('ratings', df.ratings.cast('int'))
-    df = df.withColumn('comments', df.comments.cast('int'))
+    df = df.withColumn("age", df.age.cast("int"))
+    df = df.withColumn("length", df.length.cast("int"))
+    df = df.withColumn("views", df.views.cast("int"))
+    df = df.withColumn("rate", df.rate.cast("float"))
+    df = df.withColumn("ratings", df.ratings.cast("int"))
+    df = df.withColumn("comments", df.comments.cast("int"))
 
     return df
 
@@ -51,7 +61,7 @@ def rangeQuery(dataframe, args):
     #     q += 1
 
     t1, t2 = args[3], args[4]
-    string = (("','").join(categories))
+    string = ("','").join(categories)
     string1 = f"""category IN ('{string}') AND length >= {t1} AND length <= {t2}"""
     print("STRING1")
     print(string1)
@@ -60,13 +70,16 @@ def rangeQuery(dataframe, args):
 
 def ratingQuery(dataframe, args):
     k = args[3]
-    dataframe.select(dataframe.videoID, dataframe.rate, dataframe.ratings, dataframe.rate *
-                     dataframe.ratings).orderBy('(rate * ratings)', ascending=False).show(int(k))
+    dataframe.select(
+        dataframe.videoID,
+        dataframe.rate,
+        dataframe.ratings,
+        dataframe.rate * dataframe.ratings,
+    ).orderBy("(rate * ratings)", ascending=False).show(int(k))
 
 
 def categoriesQuery(dataframe):
-    dataframe.groupBy('category').count().orderBy(
-        'count', ascending=False).show()
+    dataframe.groupBy("category").count().orderBy("count", ascending=False).show()
 
 
 def viewsQuery(dataframe, args):
@@ -77,7 +90,8 @@ def viewsQuery(dataframe, args):
 def userRecommendationQuery(df, args):
     username = args[3]
     df.filter(f"uploader='{username}'").select(
-        explode('relatedIDs').alias(f'{username} - Related')).dropDuplicates().show()
+        explode("relatedIDs").alias(f"{username} - Related")
+    ).dropDuplicates().show()
 
 
 def main(argv):
@@ -89,17 +103,17 @@ def main(argv):
     queryChoice = args[1]
     df = formatData(args[2])
 
-    if(queryChoice == "range"):
+    if queryChoice == "range":
         rangeQuery(df, args)
-    elif(queryChoice == "ratings"):
+    elif queryChoice == "ratings":
         ratingQuery(df, args)
-    elif(queryChoice == "categories"):
+    elif queryChoice == "categories":
         categoriesQuery(df)
-    elif(queryChoice == "views"):
+    elif queryChoice == "views":
         viewsQuery(df, args)
-    elif(queryChoice == "user-recommendation"):
+    elif queryChoice == "user-recommendation":
         userRecommendationQuery(df, args)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(sys.argv)
