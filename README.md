@@ -15,4 +15,9 @@ Uses data from [here](https://netsg.cs.sfu.ca/youtubedata/) and provides the fol
 
 Running instructions for main.py:
 
-"spark-submit main.py queryChoice fileName Args"
+`spark-submit main.py range 0.txt <t1> <t2> <category1> [other categories]`
+`spark-submit main.py ratings 0.txt <k>`
+`spark-submit main.py categories 0.txt`
+`spark-submit main.py views 0.txt <k>`
+`spark-submit main.py user-recommendation 0.txt <username>`
+
