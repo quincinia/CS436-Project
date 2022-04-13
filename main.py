@@ -65,7 +65,9 @@ def rangeQuery(dataframe, args):
     string1 = f"""category IN ('{string}') AND length >= {t1} AND length <= {t2}"""
     print("STRING1")
     print(string1)
-    dataframe.filter(string1).show()
+    dataframe = dataframe.filter(string1)
+    print("count:", dataframe.count())
+    dataframe.show()
 
 
 def ratingQuery(dataframe, args):
